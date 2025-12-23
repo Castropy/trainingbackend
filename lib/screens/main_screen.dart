@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:training_backend/widget/shared/floating_action_buttons.dart';
 import 'package:training_backend/widget/shared/text_form_fields.dart';
 
 class MainScreen extends StatelessWidget {
@@ -12,7 +13,13 @@ class MainScreen extends StatelessWidget {
       ),
 
       body: Center(
-        child: CustomTextFormFields(),
+        child: Column(
+          children: [
+            CustomTextFormFields(),
+            const SizedBox(height: 20),
+            CustomFAB(), 
+          ],
+        ),
       ),
     );
   }
