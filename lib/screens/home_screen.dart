@@ -19,33 +19,52 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Training Backend")),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text("Menú de navegación",
-                  style: TextStyle(color: Colors.white, fontSize: 20)),
-            ),
-            ListTile(
-              leading: const Icon(Icons.add),
-              title: const Text("Registrar Canción"),
-              onTap: () {
-                ref.read(navigationIndexProvider.notifier).state = 0;
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.library_music),
-              title: const Text("Canciones Guardadas"),
-              onTap: () {
-                ref.read(navigationIndexProvider.notifier).state = 1;
-                Navigator.pop(context);
-              },
-            ),
-          ],
+  child: ListView(
+    padding: EdgeInsets.zero,
+    children: [
+      UserAccountsDrawerHeader(
+        accountName: const Text("Ricardo Dev"),
+        accountEmail: const Text("ricardo@example.com"),
+        currentAccountPicture: CircleAvatar(
+          backgroundColor: Colors.white,
+          child: Icon(Icons.person, size: 40, color: Colors.blue),
+        ),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Colors.lightBlueAccent],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
       ),
+      ListTile(
+        leading: const Icon(Icons.add, color: Colors.blue),
+        title: const Text("Registrar Canción"),
+        onTap: () {
+          ref.read(navigationIndexProvider.notifier).state = 0;
+          Navigator.pop(context);
+        },
+      ),
+      ListTile(
+        leading: const Icon(Icons.library_music, color: Colors.blue),
+        title: const Text("Canciones Guardadas"),
+        onTap: () {
+          ref.read(navigationIndexProvider.notifier).state = 1;
+          Navigator.pop(context);
+        },
+      ),
+      const Divider(),
+      ListTile(
+        leading: const Icon(Icons.settings, color: Colors.grey),
+        title: const Text("Configuración"),
+        onTap: () {
+          // Aquí podrías agregar otra pantalla
+        },
+      ),
+    ],
+  ),
+),
+
       body: screens[index],
     );
   }
