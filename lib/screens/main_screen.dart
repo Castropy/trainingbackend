@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:training_backend/widget/text_form_fields.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -11,12 +12,7 @@ class MainScreen extends StatelessWidget {
       ),
 
       body: Center(
-        child: TextFormField(
-          decoration: InputDecoration(
-            labelText: 'Enter something',
-            border: OutlineInputBorder(),
-          ),
-        ),
+        child: CustomTextFormFields(),
       ),
     );
   }
