@@ -14,7 +14,10 @@ class CustomTextFormFields extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      decoration: InputDecoration(labelText: label),
+      decoration: 
+       InputDecoration(labelText: label),
+       
+       
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "Este campo es obligatorio";
