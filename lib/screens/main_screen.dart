@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:training_backend/models/cancion.dart';
+import 'package:training_backend/providers/api_provider.dart';
 import 'package:training_backend/providers/cancion_provider.dart';
 import 'package:training_backend/widget/shared/floating_action_buttons.dart';
 import 'package:training_backend/widget/shared/text_form_fields.dart';
@@ -29,25 +30,43 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     super.dispose();
   }
 
-  void _guardarCancion() {
-    if (_formKey.currentState!.validate()) {
-      final nuevaCancion = Cancion(
-        nombre: nombreController.text,
-        duracion: duracionController.text,
-        artista: artistaController.text,
-        album: albumController.text,
-      );
+  void _guardarCancion() async {
+  if (_formKey.currentState!.validate()) {
+    final nuevaCancion = Cancion(
+      nombre: nombreController.text,
+      duracion: duracionController.text,
+      artista: artistaController.text,
+      album: albumController.text,
+    );
 
-      // Guardamos en el provider
-      ref.read(cancionProvider.notifier).state = nuevaCancion;
+    try {
+      final api = ref.read(apiServiceProvider);
+      final creada = await api.addCancion(nuevaCancion);
+
+      if (!mounted) return; // 👈 aseguramos que el widget sigue activo
+
+      // Guardamos en el provider global
+      ref.read(cancionProvider.notifier).state = creada;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Canción registrada en estado global")),
+        SnackBar(content: Text("Canción registrada: ${creada.nombre}")),
       );
 
-      //print("Canción guardada: ${nuevaCancion.toJson()}");
+      // Limpia los campos
+      nombreController.clear();
+      duracionController.clear();
+      artistaController.clear();
+      albumController.clear();
+    } catch (e) {
+      if (!mounted) return; // 👈 también aquí
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
     }
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
