@@ -62,9 +62,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           child: Column(
             children: [
               CustomTextFormFields(controller: nombreController, label: "Nombre"),
+              const SizedBox(height: 10),
               CustomTextFormFields(controller: duracionController, label: "Duración"),
+              const SizedBox(height: 10),
               CustomTextFormFields(controller: artistaController, label: "Artista"),
+              const SizedBox(height: 10),
               CustomTextFormFields(controller: albumController, label: "Álbum"),
+              const SizedBox(height: 10),
               const SizedBox(height: 20),
               CustomFAB(onPressed: _guardarCancion),
               if (cancion != null) ...[
