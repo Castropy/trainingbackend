@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 import '../models/cancion.dart';
 
 class ApiService {
-  final String baseUrl = "http://10.0.2.2:8000/api/canciones/"; 
+  final String baseUrl = "http://10.0.2.2:8000/api/canciones/";
+ 
   // ⚠️ Usa 10.0.2.2 si estás en emulador Android.
   // Si usas dispositivo físico, reemplaza por la IP local de tu PC.
 

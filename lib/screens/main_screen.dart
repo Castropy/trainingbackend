@@ -30,7 +30,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     super.dispose();
   }
 
-  void _guardarCancion() async {
+ void _guardarCancion() async { 
   if (_formKey.currentState!.validate()) {
     final nuevaCancion = Cancion(
       nombre: nombreController.text,
@@ -43,28 +43,29 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       final api = ref.read(apiServiceProvider);
       final creada = await api.addCancion(nuevaCancion);
 
-      if (!mounted) return; // 👈 aseguramos que el widget sigue activo
+      if (!mounted) return;
 
-      // Guardamos en el provider global
       ref.read(cancionProvider.notifier).state = creada;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Canción registrada: ${creada.nombre}")),
+        SnackBar(content: Text("✅ Conexión OK: ${creada.nombre} guardada en backend")),
       );
 
-      // Limpia los campos
+     
       nombreController.clear();
       duracionController.clear();
       artistaController.clear();
       albumController.clear();
     } catch (e) {
-      if (!mounted) return; // 👈 también aquí
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
+        SnackBar(content: Text("❌ Error de conexión: $e")),
       );
+      
     }
   }
 }
+
 
 
 
