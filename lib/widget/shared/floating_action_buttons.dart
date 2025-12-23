@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CustomFAB extends StatelessWidget {
-  const CustomFAB({super.key});
+  final VoidCallback onPressed;
+
+  const CustomFAB({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () {
-        // Acción del botón
-      },
-      child: const Icon(Icons.add),
+      onPressed: onPressed,
+      child: const Icon(Icons.save),
     );
   }
 }
