@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:training_backend/widget/text_form_fields.dart';
+import 'package:training_backend/widget/shared/text_form_fields.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
