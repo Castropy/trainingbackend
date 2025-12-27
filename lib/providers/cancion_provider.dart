@@ -2,25 +2,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import '../models/cancion.dart';
 import '../services/api_service.dart';
-import '../repositories/cancion_repository.dart';
 
+class CancionNotifier extends StateNotifier<List<Cancion>> {
+  final ApiService api;
 
-// Provider para una canción puntual (última creada)
-final cancionProvider = StateProvider<Cancion?>((ref) => null);
+  CancionNotifier(this.api) : super([]);
 
-// Provider para el servicio API
+  Future<void> loadCanciones() async {
+    final canciones = await api.getCanciones();
+    state = canciones;
+  }
+
+  Future<void> addCancion(Cancion nueva) async {
+    final creada = await api.addCancion(nueva);
+    state = [...state, creada]; // 👈 actualiza lista en memoria
+  }
+}
+
 final apiServiceProvider = Provider<ApiService>((ref) {
   return ApiService(baseUrl: 'http://10.0.2.2:8000/api/canciones/');
 });
 
-// Provider para el repositorio
-final cancionRepositoryProvider = Provider<CancionRepository>((ref) {
+final cancionesProvider =
+    StateNotifierProvider<CancionNotifier, List<Cancion>>((ref) {
   final api = ref.watch(apiServiceProvider);
-  return CancionRepository(api);
-});
-
-// Provider para obtener todas las canciones (GET)
-final cancionesFutureProvider = FutureProvider<List<Cancion>>((ref) {
-  final repo = ref.watch(cancionRepositoryProvider);
-  return repo.getAll();
+  return CancionNotifier(api);
 });

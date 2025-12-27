@@ -29,48 +29,43 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     super.dispose();
   }
 
- void _guardarCancion() async { 
-  if (_formKey.currentState!.validate()) {
-    final nuevaCancion = Cancion(
-      nombre: nombreController.text,
-      duracion: duracionController.text,
-      artista: artistaController.text,
-      album: albumController.text,
-    );
-
-    try {
-      final api = ref.read(apiServiceProvider);
-      final creada = await api.addCancion(nuevaCancion);
-
-      if (!mounted) return;
-
-      ref.read(cancionProvider.notifier).state = creada;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("✅ Conexión OK: ${creada.nombre} guardada en backend")),
+  void _guardarCancion() async {
+    if (_formKey.currentState!.validate()) {
+      final nuevaCancion = Cancion(
+        nombre: nombreController.text,
+        duracion: duracionController.text,
+        artista: artistaController.text,
+        album: albumController.text,
       );
 
-     
-      nombreController.clear();
-      duracionController.clear();
-      artistaController.clear();
-      albumController.clear();
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("❌ Error de conexión: $e")),
-      );
-      
+      try {
+        // 👇 Usamos el StateNotifier para agregar y actualizar la lista global
+        final cancionesNotifier = ref.read(cancionesProvider.notifier);
+        await cancionesNotifier.addCancion(nuevaCancion);
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("✅ Conexión OK: ${nuevaCancion.nombre} guardada en backend")),
+        );
+
+        // Limpiar campos
+        nombreController.clear();
+        duracionController.clear();
+        artistaController.clear();
+        albumController.clear();
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("❌ Error de conexión: $e")),
+        );
+      }
     }
   }
-}
-
-
-
 
   @override
   Widget build(BuildContext context) {
-    final cancion = ref.watch(cancionProvider);
+    final canciones = ref.watch(cancionesProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Registrar Canción')),
@@ -87,12 +82,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               CustomTextFormFields(controller: artistaController, label: "Artista"),
               const SizedBox(height: 10),
               CustomTextFormFields(controller: albumController, label: "Álbum"),
-              const SizedBox(height: 10),
               const SizedBox(height: 20),
               CustomFAB(onPressed: _guardarCancion),
-              if (cancion != null) ...[
+              if (canciones.isNotEmpty) ...[
                 const SizedBox(height: 20),
-                Text("Última canción registrada: ${cancion.nombre} - ${cancion.artista}"),
+                Text("Última canción registrada: ${canciones.last.nombre} - ${canciones.last.artista}"),
               ]
             ],
           ),
