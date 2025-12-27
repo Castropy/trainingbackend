@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../models/cancion.dart';
 import '../services/api_service.dart';
 import '../repositories/cancion_repository.dart';
+
 
 // Provider para una canción puntual (última creada)
 final cancionProvider = StateProvider<Cancion?>((ref) => null);

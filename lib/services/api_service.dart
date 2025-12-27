@@ -3,42 +3,33 @@ import 'package:http/http.dart' as http;
 import '../models/cancion.dart';
 
 class ApiService {
-  final String baseUrl = "http://10.0.2.2:8000/api/canciones/";
- 
-  // ⚠️ Usa 10.0.2.2 si estás en emulador Android.
-  // Si usas dispositivo físico, reemplaza por la IP local de tu PC.
+  final String baseUrl;
+  final http.Client _client;
+
+  ApiService({required this.baseUrl, http.Client? client})
+      : _client = client ?? http.Client();
 
   Future<Cancion> addCancion(Cancion cancion) async {
-    final response = await http.post(
+    final response = await _client.post(
       Uri.parse(baseUrl),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(cancion.toJson()),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return Cancion(
-        nombre: data["nombre"],
-        duracion: data["duracion"],
-        artista: data["artista"],
-        album: data["album"],
-      );
+      return Cancion.fromJson(data);
     } else {
       throw Exception("Error al registrar canción: ${response.body}");
     }
   }
 
   Future<List<Cancion>> getCanciones() async {
-    final response = await http.get(Uri.parse(baseUrl));
+    final response = await _client.get(Uri.parse(baseUrl));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return data.map((json) => Cancion(
-        nombre: json["nombre"],
-        duracion: json["duracion"],
-        artista: json["artista"],
-        album: json["album"],
-      )).toList();
+      return data.map((json) => Cancion.fromJson(json)).toList();
     } else {
       throw Exception("Error al obtener canciones");
     }

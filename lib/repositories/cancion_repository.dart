@@ -6,7 +6,7 @@ class CancionRepository {
 
   CancionRepository(this.api);
 
-  Future<List<Cancion>> getAll() => api.fetchCanciones();
+  Future<List<Cancion>> getAll() => api.getCanciones();
 
   Future<Cancion> create(Cancion nueva) => api.addCancion(nueva);
 }
