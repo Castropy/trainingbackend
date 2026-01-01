@@ -8,6 +8,7 @@ class CustomFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      shape:StadiumBorder(),
       onPressed: onPressed,
       child: const Icon(Icons.save),
     );
