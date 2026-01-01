@@ -9,6 +9,7 @@ class CustomFAB extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       shape:StadiumBorder(),
+      splashColor: Color.fromARGB(255, 255, 255, 255),
       onPressed: onPressed,
       child: const Icon(Icons.save),
     );
